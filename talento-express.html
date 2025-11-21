@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TalentLink Express - Mockups Interactivos</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <!-- NAVEGACIÓN ENTRE PANTALLAS -->
+    <nav class="screen-nav">
+      <button onclick="showScreen('onboarding1')" class="nav-btn active">Onboarding 1</button>
+      <button onclick="showScreen('onboarding2')" class="nav-btn">Onboarding 2</button>
+      <button onclick="showScreen('onboarding3')" class="nav-btn">Onboarding 3</button>
+      <button onclick="showScreen('feed')" class="nav-btn">Feed</button>
+      <button onclick="showScreen('feedComplete')" class="nav-btn">Feed Completo</button>
+      <button onclick="showScreen('matches')" class="nav-btn">Matches</button>
+      <button onclick="showScreen('matchesEmpty')" class="nav-btn">Sin Matches</button>
+      <button onclick="showScreen('chat')" class="nav-btn">Chat</button>
+      <button onclick="showScreen('chatNew')" class="nav-btn">Chat Nuevo</button>
+      <button onclick="showScreen('profile')" class="nav-btn">Perfil</button>
+      <button onclick="showScreen('editProfile')" class="nav-btn">Editar Perfil</button>
+    </nav>
+
+    <!-- PANTALLA 1: ONBOARDING PASO 1 -->
+    <div id="onboarding1" class="screen active">
+      <div class="mockup">
+        <div class="header">⚡ TalentLink Express</div>
+        <div class="step-indicator">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+        <div class="content">
+          <strong>¿Cuál es tu especialidad?</strong><br />
+          En una frase simple
+        </div>
+        <input type="text" class="input" id="specialty" placeholder="Ej: Diseñador UX/UI" />
+        <button class="button" onclick="nextOnboarding(2)">Continuar</button>
+        <div class="timer">⏱️ 60 segundos para completar tu perfil</div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 2: ONBOARDING PASO 2 -->
+    <div id="onboarding2" class="screen">
+      <div class="mockup">
+        <div class="header">⚡ TalentLink Express</div>
+        <div class="step-indicator">
+          <span class="dot"></span>
+          <span class="dot active"></span>
+          <span class="dot"></span>
+        </div>
+        <div class="content">
+          <strong>Selecciona 3 habilidades</strong><br />
+          Tus superpoderes principales
+        </div>
+        <div class="content skills-grid">
+          <span class="tag" onclick="toggleSkill(this)">Figma</span>
+          <span class="tag" onclick="toggleSkill(this)">Sketch</span>
+          <span class="tag" onclick="toggleSkill(this)">Photoshop</span>
+          <span class="tag" onclick="toggleSkill(this)">HTML/CSS</span>
+          <span class="tag" onclick="toggleSkill(this)">Prototipado</span>
+          <span class="tag" onclick="toggleSkill(this)">Research</span>
+          <span class="tag" onclick="toggleSkill(this)">Wireframing</span>
+          <span class="tag" onclick="toggleSkill(this)">UI Design</span>
+        </div>
+        <div class="content selected-skills">
+          Seleccionadas (<span id="skillCount">0</span>/3): <span id="selectedSkills"></span>
+        </div>
+        <button class="button" onclick="nextOnboarding(3)" id="continueBtn2" disabled>Continuar</button>
+      </div>
+    </div>
+
+    <!-- PANTALLA 3: ONBOARDING PASO 3 -->
+    <div id="onboarding3" class="screen">
+      <div class="mockup">
+        <div class="header">⚡ TalentLink Express</div>
+        <div class="step-indicator">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot active"></span>
+        </div>
+        <div class="content">
+          <strong>Un logro que te enorgullezca</strong><br />
+          Máximo 140 caracteres
+        </div>
+        <textarea
+          class="input achievement-input"
+          id="achievement"
+          placeholder="Ej: Rediseñé la app de banco líder aumentando conversión en 45% y satisfacción de usuarios a 4.8★"
+          maxlength="140"
+          oninput="updateCharCount()"
+        ></textarea>
+        <div class="char-count"><span id="charCount">0</span> / 140</div>
+        <button class="button primary" onclick="completeOnboarding()">¡Completar Perfil!</button>
+      </div>
+    </div>
+
+    <!-- PANTALLA 4: FEED DE OFERTAS -->
+    <div id="feed" class="screen">
+      <div class="mockup">
+        <div class="header">⚡ TalentLink Express 🔔</div>
+        <div class="offers-count">Hoy tienes <strong>5</strong> ofertas curadas para ti</div>
+
+        <div class="card-profile offer-card" id="offerCard">
+          <div class="offer-title">Diseñador UX Senior</div>
+          <div class="offer-company">TechCorp Innovation</div>
+          <div class="offer-details">📍 Bogotá (Remoto) | 💰 $4M - $6M</div>
+          <div class="offer-skills">
+            <span class="tag">Figma</span>
+            <span class="tag">Research</span>
+            <span class="tag">Prototipado</span>
+          </div>
+          <div class="offer-description">
+            <strong>Lo que harás:</strong><br />
+            Liderar proyectos de experiencia de usuario para productos fintech innovadores
+          </div>
+          <div class="match-percentage">Match: 87% ⭐</div>
+        </div>
+
+        <div class="swipe-buttons">
+          <div class="swipe-btn reject" onclick="swipeAction('reject')">⬅️</div>
+          <div class="swipe-btn super" onclick="swipeAction('super')">⬆️</div>
+          <div class="swipe-btn like" onclick="swipeAction('like')">➡️</div>
+        </div>
+
+        <div class="remaining-offers"><span id="remainingCount">4</span> ofertas restantes hoy</div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 5: FEED COMPLETADO -->
+    <div id="feedComplete" class="screen">
+      <div class="mockup">
+        <div class="header">⚡ TalentLink Express</div>
+        <div class="content complete-state">
+          <div class="complete-icon">✓</div>
+          <strong>¡Completaste tus ofertas de hoy!</strong><br /><br />
+          Vuelve mañana para 5 nuevas oportunidades curadas
+        </div>
+        <div class="countdown">⏰ Próximas ofertas en: <span id="countdown">23:59:59</span></div>
+        <button class="button" onclick="showScreen('matches')">Ver mis matches</button>
+      </div>
+    </div>
+
+    <!-- PANTALLA 6: MATCHES ACTIVOS -->
+    <div id="matches" class="screen">
+      <div class="mockup">
+        <div class="header back-header" onclick="showScreen('feed')">← Matches 💬</div>
+        <div class="matches-count">Tienes <strong>3</strong> matches activos</div>
+
+        <div class="content match-card" onclick="showScreen('chat')">
+          <div class="match-indicator">🤝</div>
+          <strong>Diseñador UX Senior</strong><br />
+          TechCorp Innovation<br />
+          <small>Match hace 2 horas</small>
+        </div>
+
+        <div class="content match-card" onclick="showScreen('chat')">
+          <div class="match-indicator">🤝</div>
+          <strong>UX/UI Designer</strong><br />
+          StartupLab<br />
+          <small>Match ayer</small><br />
+          <span class="new-messages">● 2 mensajes nuevos</span>
+        </div>
+
+        <div class="content match-card" onclick="showScreen('chat')">
+          <div class="match-indicator">🤝</div>
+          <strong>Product Designer</strong><br />
+          Digital Agency Pro<br />
+          <small>Match hace 3 días</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 7: SIN MATCHES -->
+    <div id="matchesEmpty" class="screen">
+      <div class="mockup">
+        <div class="header back-header" onclick="showScreen('feed')">← Matches</div>
+        <div class="content empty-state">
+          <div class="empty-icon">👀</div>
+          <strong>Aún no tienes matches</strong><br /><br />
+          Sigue revisando ofertas diarias.<br />
+          Cuando una empresa te seleccione también, ¡harán match!
+        </div>
+        <button class="button" onclick="showScreen('feed')">Ver ofertas de hoy</button>
+      </div>
+    </div>
+
+    <!-- PANTALLA 8: CHAT CONVERSACIÓN -->
+    <div id="chat" class="screen">
+      <div class="mockup">
+        <div class="header back-header" onclick="showScreen('matches')">← TechCorp Innovation</div>
+
+        <div class="content match-banner">
+          <div class="match-indicator small">🎉</div>
+          <strong>¡Es un Match!</strong><br />
+          <small>Hace 2 horas</small>
+        </div>
+
+        <div class="content questions-block">
+          <strong>TechCorp te pregunta:</strong><br /><br />
+          1️⃣ ¿Cuándo podrías empezar?<br />
+          2️⃣ ¿Tienes experiencia con productos fintech?<br />
+          3️⃣ ¿Prefieres remoto o híbrido?
+        </div>
+
+        <div class="content answers-block">
+          <strong>Tú respondiste:</strong><br /><br />
+          1️⃣ En 2 semanas<br />
+          2️⃣ Sí, 3 años en banca digital<br />
+          3️⃣ Prefiero remoto
+        </div>
+
+        <div class="content message-block">
+          <strong>María González - Recruiter</strong><br />
+          ¡Perfecto! Me gustaría coordinar una videollamada. ¿Tienes disponibilidad esta semana?
+        </div>
+
+        <input type="text" class="input" placeholder="Escribe tu mensaje..." id="chatInput" />
+        <button class="button primary" onclick="sendMessage()">Proponer horario de entrevista</button>
+      </div>
+    </div>
+
+    <!-- PANTALLA 9: CHAT NUEVO MATCH -->
+    <div id="chatNew" class="screen">
+      <div class="mockup">
+        <div class="header back-header" onclick="showScreen('matches')">← StartupLab</div>
+
+        <div class="content match-banner">
+          <div class="match-indicator small">🎉</div>
+          <strong>¡Nuevo Match!</strong><br />
+          <small>Justo ahora</small>
+        </div>
+
+        <div class="content questions-block">
+          <strong>StartupLab te pregunta:</strong><br /><br />
+          1️⃣ ¿Cuál es tu disponibilidad horaria?<br />
+          2️⃣ ¿Tienes portafolio online?<br />
+          3️⃣ ¿Cuál es tu expectativa salarial?
+        </div>
+
+        <input type="text" class="input" placeholder="Respuesta a pregunta 1" />
+        <input type="text" class="input" placeholder="Respuesta a pregunta 2" />
+        <input type="text" class="input" placeholder="Respuesta a pregunta 3" />
+
+        <button class="button primary" onclick="submitAnswers()">Enviar respuestas</button>
+      </div>
+    </div>
+
+    <!-- PANTALLA 10: PERFIL -->
+    <div id="profile" class="screen">
+      <div class="mockup">
+        <div class="header">⚙️ Perfil</div>
+
+        <div class="card-profile profile-card">
+          <div class="profile-icon">👤</div>
+          <div class="profile-title">Diseñador UX/UI</div>
+          <div class="profile-skills">
+            <span class="tag">Figma</span>
+            <span class="tag">Research</span>
+            <span class="tag">Prototipado</span>
+          </div>
+          <div class="profile-achievement">
+            "Rediseñé la app de banco líder aumentando conversión en 45% y satisfacción de usuarios a 4.8★"
+          </div>
+        </div>
+
+        <button class="button" onclick="showScreen('editProfile')">✏️ Editar perfil</button>
+
+        <div class="section-title">Estadísticas</div>
+        <div class="content stats-block">
+          📊 Ofertas vistas: 25<br />
+          ➡️ Interesado: 15<br />
+          ⬆️ Súper interesado: 5<br />
+          🤝 Matches: 3<br />
+          💬 Conversaciones activas: 2
+        </div>
+
+        <div class="section-title">Configuración</div>
+        <button class="button">Preferencias de búsqueda</button>
+        <button class="button">Notificaciones</button>
+        <button class="button">Privacidad</button>
+        <button class="button logout">Cerrar sesión</button>
+      </div>
+    </div>
+
+    <!-- PANTALLA 11: EDITAR PERFIL -->
+    <div id="editProfile" class="screen">
+      <div class="mockup">
+        <div class="header back-header" onclick="showScreen('profile')">← Editar Perfil</div>
+
+        <div class="section-title">Tu especialidad</div>
+        <input type="text" class="input" value="Diseñador UX/UI" id="editSpecialty" />
+
+        <div class="section-title">Tus 3 habilidades</div>
+        <div class="content">
+          <span class="tag removable">Figma ✕</span>
+          <span class="tag removable">Research ✕</span>
+          <span class="tag removable">Prototipado ✕</span>
+        </div>
+        <button class="button">Cambiar habilidades</button>
+
+        <div class="section-title">Tu logro destacado</div>
+        <textarea class="input achievement-input" id="editAchievement" maxlength="140" oninput="updateEditCharCount()">
+Rediseñé la app de banco líder aumentando conversión en 45% y satisfacción de usuarios a 4.8★</textarea
+        >
+        <div class="char-count"><span id="editCharCount">98</span> / 140</div>
+
+        <button class="button" onclick="showScreen('profile')">Cancelar</button>
+        <button class="button primary" onclick="saveProfile()">Guardar cambios</button>
+      </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+  </body>
+</html>
